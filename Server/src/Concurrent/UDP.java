@@ -45,7 +45,7 @@ public class UDP {
         }
     }
 
-    public void send(String msg, InetAddress adr, int port) throws SocketException{
+    public void send(String msg, InetAddress adr, int port){
 
         byte[] byteMsg;
         msg += END;
@@ -55,10 +55,6 @@ public class UDP {
             socket.send(dp);
         }
         catch (IOException e) {
-            if(e instanceof SocketException){
-                throw  (SocketException) e;
-            }
-
             e.printStackTrace();
         }
 

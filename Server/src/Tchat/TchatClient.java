@@ -22,12 +22,8 @@ public class TchatClient extends Client {
 
         //connexion establishment
 
-        try {
-            send(pseudo, ia, PORT_HOST);
 
-        } catch (SocketException e) {
-            return;
-        }
+        send(pseudo, ia, PORT_HOST);
 
         try {
             receive();
@@ -39,16 +35,16 @@ public class TchatClient extends Client {
         emptyBuffer();
 
 
-        t =new Thread(() -> {
+        t = new Thread(() -> {
             while (true) {
 
                 try {
                     receive();
-                } catch (SocketException e){
+                } catch (SocketException e) {
                     break;
                 }
                 System.out.println(getBuffer());
-                if(getBuffer().startsWith("/list")){
+                if (getBuffer().startsWith("/list")) {
                     listener.onListReception(getBuffer().substring(5));
                 } else {
                     listener.onReception(getBuffer());
@@ -70,12 +66,11 @@ public class TchatClient extends Client {
     }
 
     public void sendMessage(String message) {
-        try {
-            send(message, adr, port);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        if(message.equals("/logout")){
+
+        send(message, adr, port);
+
+
+        if (message.equals("/logout")) {
             stop();
         }
     }

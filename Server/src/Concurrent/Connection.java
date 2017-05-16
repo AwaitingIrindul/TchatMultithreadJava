@@ -12,11 +12,7 @@ public class Connection extends UDP implements Runnable {
 
     public Connection(InetAddress iaClient, int portClient) {
         super(getOpenPort(1024,2048));
-        try {
-            send("Successful connection", iaClient, portClient);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        send("Successful connection", iaClient, portClient);
     }
 
     public void run() {
@@ -46,11 +42,7 @@ public class Connection extends UDP implements Runnable {
 
     //Will be overwritten
     protected void sendMessage(String message){
-        try {
-            send(message, getHostAddress(), getHostPort());
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        send(message, getHostAddress(), getHostPort());
         System.out.println(getHostPort());
         
     }

@@ -24,10 +24,6 @@ public class Emission extends UDP implements Runnable {
 
     @Override
     public void run() {
-        try {
-            send(message, adr, port);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        send(message, adr, port);
     }
 }

@@ -1,8 +1,12 @@
 .terminal .content{
     -fx-background-color: black;
 
+
 }
 
-.text-area {
-    -fx-text-fill: #1ec503;
+.terminal {
+
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, greenyellow 0%, lawngreen 50%);
+    -fx-font: 14 "Consolas";
+
 }

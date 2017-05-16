@@ -22,11 +22,7 @@ public class Client extends UDP {
         Scanner sc = new Scanner(System.in);
         String str = "";
 
-        try {
-            send(str, ia, PORT_HOST);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        send(str, ia, PORT_HOST);
         try {
             receive();
         } catch (SocketException e) {
@@ -42,11 +38,7 @@ public class Client extends UDP {
 
             System.out.println("Send your message :");
             str = sc.nextLine();
-            try {
-                send(str, adr, port);
-            } catch (SocketException e) {
-                e.printStackTrace();
-            }
+            send(str, adr, port);
 
             try {
                 receive();
