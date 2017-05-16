@@ -4,6 +4,7 @@ package View;/**
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,8 @@ public class Tchat extends Application  implements MessageListener{
     private TextArea clients;
     private TextField inputMsg;
 
+    private Scene scene;
+    private Stage primaryStage;
     public static void main(String[] args) {
         launch(args);
     }
@@ -35,21 +38,38 @@ public class Tchat extends Application  implements MessageListener{
     @Override
     public void start(Stage primaryStage) {
 
-        Scene scene = new Scene(createContent());
         //createHandlers(scene);
         primaryStage.setOnCloseRequest(t -> {
             Platform.exit();
             System.exit(0);
         });
 
-        scene.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER){
-               sendAndClear();
 
-            }
-        });
+
+        //Creation du pane principal
+        BorderPane container = new BorderPane();
+        container.setPrefSize(WIDTH, HEIGHT);
+        Group root = new Group();
+        root.getChildren().add(container);
+
+
+        //Mise en place du name
+        TextField name = new TextField("Enter your pseudo");
+
+        container.setTop(name);
+
+        //Mise en place du bouton
+        Button btn2 = new Button("Connect");
+        btn2.setOnAction(event -> initClient(name.getText()));
+        container.setCenter(btn2);
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
         //scene.getStylesheets().add("style/menu.css");
+
+
 
         primaryStage.setTitle("Tchat avec server RX302");
         primaryStage.setResizable(false);
@@ -57,14 +77,33 @@ public class Tchat extends Application  implements MessageListener{
 
 
         primaryStage.show();
+        this.primaryStage = primaryStage;
+    }
 
+    private void firstScene(){
 
     }
 
+    private void changeScene() {
+
+        scene = new Scene(createContent());
+
+        scene.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                sendAndClear();
+            }
+        });
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     private void initClient(String pseudo ){
+        changeScene();
         client = new TchatClient(this);
         client.setPseudo(pseudo);
         client.run();
+
     }
 
     private Parent createContent() {
@@ -137,5 +176,10 @@ public class Tchat extends Application  implements MessageListener{
         String old = tchatMsgs.getText();
         old = old + "\n" + message;
         tchatMsgs.setText(old);
+    }
+
+    @Override
+    public void logout() {
+
     }
 }

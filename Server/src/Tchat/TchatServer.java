@@ -16,7 +16,7 @@ public class TchatServer extends ConcurrentServer {
         connections = new ArrayList<>();
     }
 
-    public void sendAll(String msg, InetAddress hostAdress, int port){
+    public void sendAll(String msg){
         for(TchatConnection c : connections){
             new Thread(() -> {
                 c.sendToClient(msg);
@@ -26,7 +26,6 @@ public class TchatServer extends ConcurrentServer {
 
     public void removeClient(TchatConnection tchatConnection){
         System.out.println("Connexion stoped for : " + tchatConnection.getClientAdress() +":" + tchatConnection.getClientPort() );
-        //// TODO: 16/05/2017 Prevenir que pseudo c'est deco 
         connections.remove(tchatConnection);
 
     }
@@ -39,6 +38,7 @@ public class TchatServer extends ConcurrentServer {
     public void addClient(TchatConnection c){
         connections.add(c);
         System.out.println("Client adeded : " + connections.size());
+        // TODO: 16/05/2017 Envoyer la liste a tout le monde
     }
 
     public static void main(String[] args) {

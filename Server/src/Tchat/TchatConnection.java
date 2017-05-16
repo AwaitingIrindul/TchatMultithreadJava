@@ -39,7 +39,7 @@ public class TchatConnection extends Connection {
 
             if (s.compareTo("logout") == 0)
                 s = "Logging out, bye :p";
-            System.out.println(pseudo + "Posted : " + s + "(" + getHostAddress() + ":" + getClientPort() + ")");
+            System.out.println(pseudo + " posted : " + s + " (" + getHostAddress() + ":" + getClientPort() + ")");
 
             sendMessage(pseudo + ": " + s);
             emptyBuffer();
@@ -58,7 +58,7 @@ public class TchatConnection extends Connection {
 
     @Override
     protected void sendMessage(String message) {
-        server.sendAll(message, getHostAddress(), getHostPort());
+        server.sendAll(message);
     }
 
     public InetAddress getClientAdress() {

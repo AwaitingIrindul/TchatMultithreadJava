@@ -25,33 +25,33 @@ public class TchatClient extends Client {
         emptyBuffer();
 
 
-
-        /*new Thread(() -> {
-            while(!Thread.currentThread().isInterrupted()){
-                String str;
-                System.out.println("Send your message :");
-                str = sc.nextLine();
-
-            }
-
-        }).start();*/
-
-
         new Thread(() -> {
             while (true) {
-                System.out.println("En attente");
                 receive();
-                String test = getBuffer();
-
-                System.out.print("Reçu : ");
                 System.out.println(getBuffer());
-                listener.onReception(getBuffer());
-            }
 
+                listener.onReception(getBuffer());
+                if(getBuffer().equals(pseudo + ":" + " Logging out, bye :p")){
+                    stop();
+                    break;
+                }
+                //When we receive a message, we notify the view
+
+            }
 
         }).start();
 
 
+        // TODO: 16/05/2017 Prevenir view
+        //listener.logout();
+
+
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        listener.logout();
     }
 
     public void sendMessage(String message) {

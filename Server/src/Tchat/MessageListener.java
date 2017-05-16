@@ -7,4 +7,5 @@ public interface MessageListener {
 
     void onReception(String message);
 
+    void logout();
 }
