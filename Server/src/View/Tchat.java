@@ -34,7 +34,7 @@ public class Tchat extends Application  implements MessageListener{
 
     @Override
     public void start(Stage primaryStage) {
-        client = new TchatClient(this);
+
         Scene scene = new Scene(createContent());
         //createHandlers(scene);
         primaryStage.setOnCloseRequest(t -> {
@@ -58,8 +58,13 @@ public class Tchat extends Application  implements MessageListener{
 
         primaryStage.show();
 
-        client.run();
 
+    }
+
+    private void initClient(String pseudo ){
+        client = new TchatClient(this);
+        client.setPseudo(pseudo);
+        client.run();
     }
 
     private Parent createContent() {

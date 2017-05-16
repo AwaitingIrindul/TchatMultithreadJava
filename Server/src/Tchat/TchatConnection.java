@@ -32,13 +32,12 @@ public class TchatConnection extends Connection {
     public void run() {
         String s = "";
 
-        while(s.compareTo("logout") != 0)
-        {
+        while (s.compareTo("logout") != 0) {
 
             receive();
             s = getBuffer();
 
-            if(s.compareTo("logout") == 0)
+            if (s.compareTo("logout") == 0)
                 s = "Logging out, bye :p";
             System.out.println(pseudo + "Posted : " + s + "(" + getHostAddress() + ":" + getClientPort() + ")");
 
@@ -70,9 +69,8 @@ public class TchatConnection extends Connection {
         return getHostPort();
     }
 
-    public String getPseudo(){
-        return  pseudo;
+    public String getPseudo() {
+        return pseudo;
     }
-
 
 }

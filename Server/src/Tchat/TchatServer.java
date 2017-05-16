@@ -26,6 +26,7 @@ public class TchatServer extends ConcurrentServer {
 
     public void removeClient(TchatConnection tchatConnection){
         System.out.println("Connexion stoped for : " + tchatConnection.getClientAdress() +":" + tchatConnection.getClientPort() );
+        //// TODO: 16/05/2017 Prevenir que pseudo c'est deco 
         connections.remove(tchatConnection);
 
     }

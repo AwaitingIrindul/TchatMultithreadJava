@@ -18,7 +18,7 @@ public class TchatClient extends Client {
     public void run() {
 
         //connexion establishment
-        send("", ia, PORT_HOST);
+        send(pseudo, ia, PORT_HOST);
         receive();
 
         System.out.println(getBuffer());

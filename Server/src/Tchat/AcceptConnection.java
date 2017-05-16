@@ -1,11 +1,6 @@
 package Tchat;
 
 import Concurrent.UDP;
-import Tchat.TchatConnection;
-import Tchat.TchatServer;
-
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 
 /**
  * Created by Irindul on 16/05/2017.
@@ -26,7 +21,7 @@ public class AcceptConnection extends UDP implements Runnable {
                 receive();
                 System.out.println("Someone is establishing a connection : " + getHostAddress() + ":" + getHostPort());
                 // TODO: 16/05/2017 Faire liste clients 
-                TchatConnection connection = new TchatConnection(getHostAddress(), getHostPort(), server, "Mescouilles");
+                TchatConnection connection = new TchatConnection(getHostAddress(), getHostPort(), server, getBuffer());
                 new Thread(connection).start();
                 server.addClient(connection);
             }
