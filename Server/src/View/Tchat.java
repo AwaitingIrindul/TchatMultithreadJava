@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import Tchat.*;
 
@@ -40,12 +41,28 @@ public class Tchat extends Application  implements MessageListener{
 
         //createHandlers(scene);
         primaryStage.setOnCloseRequest(t -> {
+            if(client != null)
+                client.sendMessage("/logout");
+            
             Platform.exit();
             System.exit(0);
         });
+        this.primaryStage = primaryStage;
+
+        //primaryStage.show();
+
+        firstScene();
 
 
+        primaryStage.setTitle("Tchat avec server RX302");
+        primaryStage.setResizable(false);
 
+
+        primaryStage.show();
+
+    }
+
+    private void firstScene(){
         //Creation du pane principal
         BorderPane container = new BorderPane();
         container.setPrefSize(WIDTH, HEIGHT);
@@ -54,7 +71,8 @@ public class Tchat extends Application  implements MessageListener{
 
 
         //Mise en place du name
-        TextField name = new TextField("Enter your pseudo");
+        TextField name = new TextField();
+        name.setPromptText("Enter your username");
 
         container.setTop(name);
 
@@ -63,25 +81,10 @@ public class Tchat extends Application  implements MessageListener{
         btn2.setOnAction(event -> initClient(name.getText()));
         container.setCenter(btn2);
 
-        Scene scene = new Scene(root);
+
+        scene = new Scene(root);
+        scene.getStylesheets().add("menu.css");
         primaryStage.setScene(scene);
-        primaryStage.show();
-
-        //scene.getStylesheets().add("style/menu.css");
-
-
-
-        primaryStage.setTitle("Tchat avec server RX302");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-
-
-        primaryStage.show();
-        this.primaryStage = primaryStage;
-    }
-
-    private void firstScene(){
-
     }
 
     private void changeScene() {
@@ -93,16 +96,20 @@ public class Tchat extends Application  implements MessageListener{
                 sendAndClear();
             }
         });
-
+        scene.getStylesheets().add("tchat.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private void initClient(String pseudo ){
-        changeScene();
-        client = new TchatClient(this);
-        client.setPseudo(pseudo);
-        client.run();
+        if(!pseudo.equals("")){
+            changeScene();
+            primaryStage.setTitle("Client of " + pseudo);
+            client = new TchatClient(this);
+            client.setPseudo(pseudo);
+            client.run();
+        }
+
 
     }
 
@@ -128,24 +135,25 @@ public class Tchat extends Application  implements MessageListener{
 
 
 
-        tchat.setStyle("-fx-background-color: blue");
         tchat.setMinSize(WIDTH/2,HEIGHT/2);
-        input.setStyle("-fx-background-color: lawngreen");
+
         input.setMinSize(WIDTH/2,HEIGHT/2);
-        listClient.setStyle("-fx-background-color: blueviolet");
         listClient.setMinSize(WIDTH/2,HEIGHT);
 
         inputMsg = new TextField();
 
         tchatMsgs = new TextArea();
+        tchatMsgs.getStyleClass().add("terminal");
+
         tchatMsgs.setEditable(false);
         tchatMsgs.setPrefSize(WIDTH/2, HEIGHT/2);
         tchat.getChildren().add(tchatMsgs);
 
-         clients = new TextArea();
+        clients = new TextArea();
+        clients.setEditable(false);
         listClient.getChildren().add(clients);
 
-        Button button = new Button();
+        Button button = new Button("Send");
         HBox hBox = new HBox();
         hBox.getChildren().addAll(inputMsg, button);
 
@@ -180,6 +188,12 @@ public class Tchat extends Application  implements MessageListener{
 
     @Override
     public void logout() {
+        Platform.runLater(this::firstScene);
+        client = null;
+    }
 
+    @Override
+    public void onListReception(String substring) {
+        clients.setText(substring);
     }
 }

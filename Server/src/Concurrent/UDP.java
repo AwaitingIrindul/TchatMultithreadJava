@@ -45,7 +45,7 @@ public class UDP {
         }
     }
 
-    public void send(String msg, InetAddress adr, int port) {
+    public void send(String msg, InetAddress adr, int port) throws SocketException{
 
         byte[] byteMsg;
         msg += END;
@@ -53,11 +53,12 @@ public class UDP {
             byteMsg = msg.getBytes("ascii");
             dp = new DatagramPacket(byteMsg, byteMsg.length, adr, port);
             socket.send(dp);
-        } catch (SocketTimeoutException e){
-            System.out.println("Timeout expired");
-            
         }
         catch (IOException e) {
+            if(e instanceof SocketException){
+                throw  (SocketException) e;
+            }
+
             e.printStackTrace();
         }
 
@@ -67,7 +68,7 @@ public class UDP {
         buffer = new byte[MAX_SIZE];
     }
 
-    public void receive() {
+    public void receive() throws SocketException {
         emptyBuffer();
         dp = new DatagramPacket(buffer, buffer.length);
         try {

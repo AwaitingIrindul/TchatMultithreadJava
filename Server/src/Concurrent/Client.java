@@ -3,6 +3,7 @@ package Concurrent;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
@@ -21,8 +22,16 @@ public class Client extends UDP {
         Scanner sc = new Scanner(System.in);
         String str = "";
 
-        send(str, ia, PORT_HOST);
-        receive();
+        try {
+            send(str, ia, PORT_HOST);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        try {
+            receive();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(getBuffer());
         emptyBuffer();
@@ -33,9 +42,17 @@ public class Client extends UDP {
 
             System.out.println("Send your message :");
             str = sc.nextLine();
-            send(str, adr, port);
+            try {
+                send(str, adr, port);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
 
-            receive();
+            try {
+                receive();
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
             System.out.println("Server : " + getBuffer());
             emptyBuffer();
 
@@ -48,18 +65,18 @@ public class Client extends UDP {
     }
 
     @Override
-    public void receive() {
+    public void receive() throws SocketException {
         dp = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(dp);
             adr = dp.getAddress();
             port = dp.getPort();
-        } catch (SocketTimeoutException e){
-            System.out.println("Timeout expired client receive");
+        } catch (IOException e) {
 
-        }
-        catch (IOException e) {
+            if(e instanceof SocketException)
+                throw (SocketException)e;
             e.printStackTrace();
+
         }
     }
 }

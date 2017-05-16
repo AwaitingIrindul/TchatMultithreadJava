@@ -1,6 +1,7 @@
 package Concurrent;
 
 import java.net.InetAddress;
+import java.net.SocketException;
 
 /**
  * Created by Irindul on 02/05/2017.
@@ -11,7 +12,11 @@ public class Connection extends UDP implements Runnable {
 
     public Connection(InetAddress iaClient, int portClient) {
         super(getOpenPort(1024,2048));
-        send("Successful connection", iaClient, portClient);
+        try {
+            send("Successful connection", iaClient, portClient);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
@@ -20,7 +25,11 @@ public class Connection extends UDP implements Runnable {
         while(s.compareTo("logout") != 0)
         {
 
-            receive();
+            try {
+                receive();
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
             s = getBuffer();
 
             if(s.compareTo("logout") == 0)
@@ -37,7 +46,11 @@ public class Connection extends UDP implements Runnable {
 
     //Will be overwritten
     protected void sendMessage(String message){
-        send(message, getHostAddress(), getHostPort());
+        try {
+            send(message, getHostAddress(), getHostPort());
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         System.out.println(getHostPort());
         
     }

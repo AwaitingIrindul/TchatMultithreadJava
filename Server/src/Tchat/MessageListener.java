@@ -8,4 +8,6 @@ public interface MessageListener {
     void onReception(String message);
 
     void logout();
+
+    void onListReception(String substring);
 }

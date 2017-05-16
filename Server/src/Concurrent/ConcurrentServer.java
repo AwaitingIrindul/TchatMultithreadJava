@@ -1,5 +1,7 @@
 package Concurrent;
 
+import java.net.SocketException;
+
 /**
  * Created by Irindul on 02/05/2017.
  */
@@ -12,7 +14,11 @@ package Concurrent;
         public void run() {
             while(true) {
 
-                receive();
+                try {
+                    receive();
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("New client : " + getHostName() + ":" + getHostPort());
                 new Thread(new Connection(getHostAddress(), getHostPort())).start();
             }

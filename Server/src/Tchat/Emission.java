@@ -4,6 +4,7 @@ import Concurrent.UDP;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
 /**
  * Created by Irindul on 16/05/2017.
@@ -23,6 +24,10 @@ public class Emission extends UDP implements Runnable {
 
     @Override
     public void run() {
-        send(message, adr, port);
+        try {
+            send(message, adr, port);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 }

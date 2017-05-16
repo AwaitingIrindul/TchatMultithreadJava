@@ -3,6 +3,7 @@ package Tchat;
 import Concurrent.Connection;
 
 import java.net.InetAddress;
+import java.net.SocketException;
 
 /**
  * Created by Irindul on 09/05/2017.
@@ -30,31 +31,50 @@ public class TchatConnection extends Connection {
 
     @Override
     public void run() {
-        String s = "";
+        String s;
+        boolean login = true;
+        while (login) {
 
-        while (s.compareTo("logout") != 0) {
-
-            receive();
+            try {
+                receive();
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
             s = getBuffer();
 
-            if (s.compareTo("logout") == 0)
-                s = "Logging out, bye :p";
-            System.out.println(pseudo + " posted : " + s + " (" + getHostAddress() + ":" + getClientPort() + ")");
+            if (s.compareTo("/logout") == 0){
+                login = false;
+                break;
+            } if(s.startsWith("/")){
+                String pseudoOther = s.substring(1);
+                if(s.length() >= 2){
+                    pseudoOther = pseudoOther.split(" ")[0];
 
-            sendMessage(pseudo + ": " + s);
+                    //+1 for the / charachter
+                    int length = pseudoOther.length() + 1;
+                    String message = getPseudo() + " whispers " + s.substring(length);
+                    server.sendPersonnal(message, pseudoOther);
+                    sendToClient(message);
+                }
+
+
+
+            } else {
+                System.out.println(pseudo + " posted : " + s + " (" + getHostAddress() + ":" + getClientPort() + ")");
+                sendMessage(pseudo + "$ " + s);
+            }
+
             emptyBuffer();
 
         }
-        System.out.println("Stopped thread");
+        logout();
+    }
+
+    private void logout() {
+        server.removeClient(this);
         stop();
     }
 
-
-    @Override
-    public void stop() {
-        super.stop();
-        server.removeClient(this);
-    }
 
     @Override
     protected void sendMessage(String message) {
@@ -72,5 +92,23 @@ public class TchatConnection extends Connection {
     public String getPseudo() {
         return pseudo;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null ){
+            return false;
+        }
+        if(this == obj){
+            return true;
+        }
+
+        if(obj instanceof TchatConnection){
+            TchatConnection converted = (TchatConnection) obj;
+            return converted.port == this.port;
+        }
+
+        return false;
+    }
+
 
 }

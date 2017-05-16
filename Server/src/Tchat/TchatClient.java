@@ -2,6 +2,8 @@ package Tchat;
 
 import Concurrent.Client;
 
+import java.net.SocketException;
+
 /**
  * Created by Irindul on 09/05/2017.
  */
@@ -9,6 +11,7 @@ public class TchatClient extends Client {
     String pseudo;
 
     MessageListener listener;
+    Thread t;
 
     public TchatClient(MessageListener listener) {
         this.listener = listener;
@@ -18,33 +21,45 @@ public class TchatClient extends Client {
     public void run() {
 
         //connexion establishment
-        send(pseudo, ia, PORT_HOST);
-        receive();
+
+        try {
+            send(pseudo, ia, PORT_HOST);
+
+        } catch (SocketException e) {
+            return;
+        }
+
+        try {
+            receive();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(getBuffer());
         emptyBuffer();
 
 
-        new Thread(() -> {
+        t =new Thread(() -> {
             while (true) {
-                receive();
-                System.out.println(getBuffer());
 
-                listener.onReception(getBuffer());
-                if(getBuffer().equals(pseudo + ":" + " Logging out, bye :p")){
-                    stop();
+                try {
+                    receive();
+                } catch (SocketException e){
                     break;
                 }
+                System.out.println(getBuffer());
+                if(getBuffer().startsWith("/list")){
+                    listener.onListReception(getBuffer().substring(5));
+                } else {
+                    listener.onReception(getBuffer());
+                }
+
                 //When we receive a message, we notify the view
 
             }
 
-        }).start();
-
-
-        // TODO: 16/05/2017 Prevenir view
-        //listener.logout();
-
+        });
+        t.start();
 
     }
 
@@ -55,10 +70,18 @@ public class TchatClient extends Client {
     }
 
     public void sendMessage(String message) {
-        send(message, adr, port);
+        try {
+            send(message, adr, port);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        if(message.equals("/logout")){
+            stop();
+        }
     }
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
+
 }
