@@ -26,7 +26,7 @@ public class AcceptConnection extends UDP implements Runnable {
                 receive();
                 System.out.println("Someone is establishing a connection : " + getHostAddress() + ":" + getHostPort());
                 // TODO: 16/05/2017 Faire liste clients 
-                TchatConnection connection = new TchatConnection(getHostAddress(), getHostPort(), server);
+                TchatConnection connection = new TchatConnection(getHostAddress(), getHostPort(), server, "Mescouilles");
                 new Thread(connection).start();
                 server.addClient(connection);
             }

@@ -58,4 +58,7 @@ public class TchatClient extends Client {
         send(message, adr, port);
     }
 
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
 }
