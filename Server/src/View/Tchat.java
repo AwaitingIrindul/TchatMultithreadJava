@@ -21,7 +21,7 @@ import Tchat.*;
 
 public class Tchat extends Application  implements MessageListener{
 
-    private final static int WIDTH = 500;
+    private final static int WIDTH = 700;
     private final static int HEIGHT = 500;
 
     private TchatClient client;
@@ -56,6 +56,7 @@ public class Tchat extends Application  implements MessageListener{
 
         primaryStage.setTitle("Tchat avec server RX302");
         primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
 
 
         primaryStage.show();
@@ -66,18 +67,21 @@ public class Tchat extends Application  implements MessageListener{
         //Creation du pane principal
         BorderPane container = new BorderPane();
         container.setPrefSize(WIDTH, HEIGHT);
+        container.getStyleClass().add("terminal");
         Group root = new Group();
         root.getChildren().add(container);
 
 
         //Mise en place du name
         TextField name = new TextField();
+        name.setMaxSize(WIDTH-2, HEIGHT/10);
         name.setPromptText("Enter your username");
+        container.setBottom(name);
 
-        container.setTop(name);
 
         //Mise en place du bouton
         Button btn2 = new Button("Connect");
+        //btn2.setPrefSize(WIDTH-1, HEIGHT/10);
         btn2.setOnAction(event -> initClient(name.getText()));
         container.setCenter(btn2);
 
@@ -137,29 +141,33 @@ public class Tchat extends Application  implements MessageListener{
 
         borderPaneLeft.setTop(tchat);
         borderPaneLeft.setBottom(input);
-        borderPaneRight.setCenter(listClient);
+        borderPaneRight.setBottom(listClient);
 
 
 
-        tchat.setMinSize(WIDTH/2,HEIGHT/2);
-
-        input.setMinSize(WIDTH/2,HEIGHT/2);
-        listClient.setMinSize(WIDTH/2,HEIGHT);
+        tchat.setMinSize(9*WIDTH/10,9*HEIGHT/10);
+        input.setMinSize(9*WIDTH/10,HEIGHT/10);
+        listClient.setMinSize(WIDTH/5,HEIGHT);
 
         inputMsg = new TextField();
+        inputMsg.setMinSize(8*WIDTH/10,HEIGHT/10);
+
 
         tchatMsgs = new TextArea();
         tchatMsgs.getStyleClass().add("terminal");
 
         tchatMsgs.setEditable(false);
-        tchatMsgs.setPrefSize(WIDTH/2, HEIGHT/2);
+        tchatMsgs.setPrefSize(9*WIDTH/10, 9*HEIGHT/10);
         tchat.getChildren().add(tchatMsgs);
 
         clients = new TextArea();
+        clients.setMinSize(WIDTH,HEIGHT);
+        clients.getStyleClass().add("terminal");
         clients.setEditable(false);
         listClient.getChildren().add(clients);
 
         Button button = new Button("Send");
+        button.setMinSize(1*WIDTH/10,HEIGHT/10);
         HBox hBox = new HBox();
         hBox.getChildren().addAll(inputMsg, button);
 
