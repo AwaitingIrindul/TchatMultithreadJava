@@ -31,7 +31,7 @@ public class AcceptConnection extends UDP implements Runnable {
 
                 new Thread(connection).start();
                 server.addClient(connection);
-                server.sendAll(connection.getPseudo()  + " is now connected");
+                server.sendAll(connection.getPseudo()  + " is now connected ");
             }
 
             server.stop();

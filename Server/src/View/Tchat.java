@@ -84,6 +84,12 @@ public class Tchat extends Application  implements MessageListener{
 
         scene = new Scene(root);
         scene.getStylesheets().add("menu.css");
+
+        scene.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                initClient(name.getText());
+            }
+        });
         primaryStage.setScene(scene);
     }
 

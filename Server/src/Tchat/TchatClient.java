@@ -33,6 +33,7 @@ public class TchatClient extends Client {
 
         System.out.println(getBuffer());
         emptyBuffer();
+        listener.onReception("Welcome to the tchat (/logout) to log out");
 
 
         t = new Thread(() -> {

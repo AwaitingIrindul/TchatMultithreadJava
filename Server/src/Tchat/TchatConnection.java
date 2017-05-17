@@ -4,6 +4,8 @@ import Concurrent.Connection;
 
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Irindul on 09/05/2017.
@@ -45,21 +47,10 @@ public class TchatConnection extends Connection {
             if (s.compareTo("/logout") == 0){
                 login = false;
                 break;
-            } if(s.startsWith("/")){
-                String pseudoOther = s.substring(1);
-                if(s.length() >= 2){
-                    pseudoOther = pseudoOther.split(" ")[0];
+            }
 
-                    //+1 for the / charachter
-                    int length = pseudoOther.length() + 1;
-                    String message = getPseudo() + " whispers " + s.substring(length);
-                    server.sendPersonnal(message, pseudoOther);
-                    sendToClient(message);
-                }
+            if(!sendPersonal(s)) {
 
-
-
-            } else {
                 System.out.println(pseudo + " posted : " + s + " (" + getHostAddress() + ":" + getClientPort() + ")");
                 sendMessage(pseudo + "$ " + s);
             }
@@ -73,6 +64,45 @@ public class TchatConnection extends Connection {
     private void logout() {
         server.removeClient(this);
         stop();
+    }
+
+    private boolean sendPersonal(String s){
+        List<String> pseudos = new ArrayList<>();
+        String message = s;
+
+        while(message.startsWith("/")){
+            String pseudoOther = message.substring(1);
+            if(message.length() > 1){
+                pseudoOther = pseudoOther.split(" ")[0];
+                pseudos.add(pseudoOther);
+
+                //Length of pseudo + 1 for the / and 1 for the space
+                int length = pseudoOther.length() + 2;
+
+                message = message.substring(length);
+            }
+        }
+
+        for(String pseudo : pseudos){
+            String send = getPseudo() + " whispers " + message;
+            server.sendPersonnal(send, pseudo);
+        }
+
+        if(pseudos.size() > 0){
+            StringBuilder send = new StringBuilder("you whispered " + message + " to ");
+            for (int i = 0; i < pseudos.size(); i++) {
+                send.append(pseudos.get(i));
+                if(i != pseudos.size()- 1){
+                    send.append(", ");
+                }
+            }
+            sendToClient(send.toString());
+        }
+
+
+        //If we send a whispers or not
+        return pseudos.size() > 0;
+
     }
 
 

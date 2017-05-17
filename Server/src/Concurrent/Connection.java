@@ -43,8 +43,6 @@ public class Connection extends UDP implements Runnable {
     //Will be overwritten
     protected void sendMessage(String message){
         send(message, getHostAddress(), getHostPort());
-        System.out.println(getHostPort());
-        
     }
 
 
