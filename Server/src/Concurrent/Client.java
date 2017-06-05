@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
 /**
@@ -13,9 +12,6 @@ import java.util.Scanner;
 public class Client extends UDP {
     protected int port;
     protected InetAddress adr;
-    public Client() {
-        super();
-    }
 
     public void run()
     {
@@ -31,8 +27,6 @@ public class Client extends UDP {
 
         System.out.println(getBuffer());
         emptyBuffer();
-
-
 
         while(str.compareTo("logout") != 0) {
 
@@ -64,11 +58,7 @@ public class Client extends UDP {
             adr = dp.getAddress();
             port = dp.getPort();
         } catch (IOException e) {
-
-            if(e instanceof SocketException)
-                throw (SocketException)e;
             e.printStackTrace();
-
         }
     }
 }

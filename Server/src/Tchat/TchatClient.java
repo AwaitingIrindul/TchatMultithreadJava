@@ -8,10 +8,10 @@ import java.net.SocketException;
  * Created by Irindul on 09/05/2017.
  */
 public class TchatClient extends Client {
-    String pseudo;
+    private String pseudo;
 
-    MessageListener listener;
-    Thread t;
+    private MessageListener listener;
+    private Thread t;
 
     public TchatClient(MessageListener listener) {
         this.listener = listener;
@@ -70,8 +70,7 @@ public class TchatClient extends Client {
 
         send(message, adr, port);
 
-
-        if (message.equals("/logout")) {
+        if ("/logout".equals(message)) {
             stop();
         }
     }

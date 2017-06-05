@@ -1,10 +1,8 @@
 package Concurrent;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Irindul
@@ -18,7 +16,7 @@ public class UDP {
     public static int PORT_HOST = 1234;
     public static int MAX_SIZE = 512;
 
-    public static String IP_S = "localhost";
+    public static String IP_S = "192.168.43.146";
 
     protected byte[] buffer = new byte[MAX_SIZE];
     public static String END = "\0";
@@ -48,9 +46,10 @@ public class UDP {
     public void send(String msg, InetAddress adr, int port){
 
         byte[] byteMsg;
-        msg += END;
+        String sendingMsg = msg;
+        sendingMsg += END;
         try {
-            byteMsg = msg.getBytes("ascii");
+            byteMsg = sendingMsg.getBytes("ascii");
             dp = new DatagramPacket(byteMsg, byteMsg.length, adr, port);
             socket.send(dp);
         }

@@ -167,15 +167,13 @@ public class Tchat extends Application  implements MessageListener{
         listClient.getChildren().add(clients);
 
         Button button = new Button("Send");
-        button.setMinSize(1*WIDTH/10,HEIGHT/10);
+        button.setMinSize(WIDTH /10,HEIGHT/10);
         HBox hBox = new HBox();
         hBox.getChildren().addAll(inputMsg, button);
 
         input.getChildren().add(hBox);
 
-        button.setOnAction(event -> {
-            sendAndClear();
-        });
+        button.setOnAction(event -> sendAndClear());
         root.getChildren().add(borderPane);
 
         //root.getChildren().addAll(button, buttonPuzzle);

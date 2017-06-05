@@ -26,11 +26,10 @@ public class Main {
 
     public static void getOpenPorts(int startPort, int endPort)
     {
-        DatagramSocket ds;
         for(int i=startPort; i<=endPort; i++)
         {
             try {
-                ds = new DatagramSocket(i);
+                new DatagramSocket(i);
             } catch (SocketException e) {
                 System.out.println("Port " + i + " fermé");
             }
